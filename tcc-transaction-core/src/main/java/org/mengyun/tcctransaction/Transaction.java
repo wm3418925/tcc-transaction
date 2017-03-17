@@ -67,7 +67,7 @@ public class Transaction implements Serializable {
 
 
     public List<Participant> getParticipants() {
-        return Collections.unmodifiableList(participants);
+        return participants;
     }
 
     public TransactionType getTransactionType() {

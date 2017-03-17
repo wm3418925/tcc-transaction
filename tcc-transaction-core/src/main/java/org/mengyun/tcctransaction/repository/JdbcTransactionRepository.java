@@ -98,6 +98,8 @@ public class JdbcTransactionRepository extends CachableTransactionRepository {
         Connection connection = null;
         PreparedStatement stmt = null;
 
+        java.util.Date lastUpdateTime = transaction.getLastUpdateTime();
+        long currentVersion = transaction.getVersion();
 
         transaction.updateTime();
         transaction.updateVersion();
@@ -120,7 +122,7 @@ public class JdbcTransactionRepository extends CachableTransactionRepository {
             stmt.setInt(4, transaction.getRetriedCount());
             stmt.setBytes(5, transaction.getXid().getGlobalTransactionId());
             stmt.setBytes(6, transaction.getXid().getBranchQualifier());
-            stmt.setLong(7, transaction.getVersion() - 1);
+            stmt.setLong(7, currentVersion);
 
             if (StringUtils.isNotEmpty(domain)) {
                 stmt.setString(8, domain);
@@ -129,8 +131,9 @@ public class JdbcTransactionRepository extends CachableTransactionRepository {
             int result = stmt.executeUpdate();
 
             return result;
-
         } catch (Throwable e) {
+            transaction.setLastUpdateTime(lastUpdateTime);
+            transaction.setVersion(currentVersion);
             throw new TransactionIOException(e);
         } finally {
             closeStatement(stmt);
