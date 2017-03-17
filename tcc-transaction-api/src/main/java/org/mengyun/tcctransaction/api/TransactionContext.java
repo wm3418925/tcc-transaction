@@ -1,8 +1,9 @@
 package org.mengyun.tcctransaction.api;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
 
 /**
  * Created by changmingxie on 10/30/15.
@@ -14,16 +15,38 @@ public class TransactionContext implements Serializable {
 
     private int status;
 
-    private Map<String, String> attachments = new ConcurrentHashMap<String, String>();
+    private Map<String, Object> attachments = new HashMap<String, Object>();
 
     public TransactionContext() {
-
     }
-
     public TransactionContext(TransactionXid xid, int status) {
         this.xid = xid;
         this.status = status;
     }
+
+
+    public Object get(String key) {
+        return attachments.get(key);
+    }
+    public Object put(String key, Object value) {
+        return attachments.put(key, value);
+    }
+    public Object remove(String key) {
+        return attachments.remove(key);
+    }
+    public boolean containsKey(String key) {
+        return attachments.containsKey(key);
+    }
+    public boolean containsValue(Object value) {
+        return attachments.containsValue(value);
+    }
+    public int size() {
+        return attachments.size();
+    }
+    public Set<Map.Entry<String,Object>> entrySet() {
+        return attachments.entrySet();
+    }
+
 
     public void setXid(TransactionXid xid) {
         this.xid = xid;
@@ -33,11 +56,12 @@ public class TransactionContext implements Serializable {
         return xid.clone();
     }
 
-    public void setAttachments(Map<String, String> attachments) {
+    @Deprecated
+    public void setAttachments(Map<String, Object> attachments) {
         this.attachments = attachments;
     }
 
-    public Map<String, String> getAttachments() {
+    public Map<String, Object> getAttachments() {
         return attachments;
     }
 

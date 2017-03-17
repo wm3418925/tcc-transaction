@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by changming.xie on 2/18/16.
  */
-public class ZooKeeperTransactionRepository extends CachableTransactionRepository {
+public class ZookeeperTransactionRepository extends CachableTransactionRepository {
 
     private String zkServers;
 
@@ -28,7 +28,7 @@ public class ZooKeeperTransactionRepository extends CachableTransactionRepositor
 
     private ObjectSerializer serializer = new JdkSerializationSerializer();
 
-    public ZooKeeperTransactionRepository() {
+    public ZookeeperTransactionRepository() {
         super();
     }
 
@@ -148,7 +148,7 @@ public class ZooKeeperTransactionRepository extends CachableTransactionRepositor
     private ZooKeeper getZk() {
 
         if (zk == null) {
-            synchronized (ZooKeeperTransactionRepository.class) {
+            synchronized (ZookeeperTransactionRepository.class) {
                 if (zk == null) {
                     try {
                         zk = new ZooKeeper(zkServers, zkTimeout, new Watcher() {

@@ -113,4 +113,8 @@ public class TransactionManager {
         transaction.enlistParticipant(participant);
         transactionRepository.update(transaction);
     }
+
+    public void updateTransaction(Transaction transaction) {
+        transactionRepository.update(transaction);
+    }
 }

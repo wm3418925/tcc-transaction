@@ -19,7 +19,7 @@
     </modules>
 
     <properties>
-        <springframework.version>3.2.12.RELEASE</springframework.version>
+        <springframework.version>4.3.7.RELEASE</springframework.version>
 
         <java.src.version>1.6</java.src.version>
         <java.target.version>1.6</java.target.version>
@@ -74,7 +74,6 @@
                 <artifactId>kryo</artifactId>
                 <version>4.0.0</version>
             </dependency>
-
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
@@ -236,7 +235,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>dubbo</artifactId>
-                <version>2.4.11</version>
+                <version>2.5.3</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>spring</artifactId>

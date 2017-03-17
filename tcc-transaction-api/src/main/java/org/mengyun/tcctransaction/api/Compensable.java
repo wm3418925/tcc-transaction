@@ -13,13 +13,13 @@ import java.lang.reflect.Method;
 @Target({ElementType.METHOD})
 public @interface Compensable {
 
-    public Propagation propagation() default Propagation.REQUIRED;
+    Propagation propagation() default Propagation.REQUIRED;
 
-    public String confirmMethod() default "";
+    String confirmMethod() default "";
 
-    public String cancelMethod() default "";
+    String cancelMethod() default "";
 
-    public Class<? extends TransactionContextEditor> transactionContextEditor() default NullableTransactionContextEditor.class;
+    Class<? extends TransactionContextEditor> transactionContextEditor() default NullableTransactionContextEditor.class;
 
     class NullableTransactionContextEditor implements TransactionContextEditor {
 

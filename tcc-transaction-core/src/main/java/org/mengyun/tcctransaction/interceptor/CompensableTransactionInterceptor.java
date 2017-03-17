@@ -37,7 +37,7 @@ public class CompensableTransactionInterceptor {
 
         Compensable compensable = method.getAnnotation(Compensable.class);
         Propagation propagation = compensable.propagation();
-        TransactionContext transactionContext = FactoryBuilder.factoryOf(compensable.transactionContextEditor()).getInstance().get(pjp.getTarget(), method, pjp.getArgs());
+        TransactionContext transactionContext = FactoryBuilder.getBeanFactory().getBean(compensable.transactionContextEditor()).get(pjp.getTarget(), method, pjp.getArgs());
 
         boolean isTransactionActive = transactionManager.isTransactionActive();
 

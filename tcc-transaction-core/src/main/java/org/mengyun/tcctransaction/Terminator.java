@@ -17,26 +17,27 @@ public class Terminator implements Serializable {
 
 
     public Terminator() {
-
     }
 
     public Object invoke(TransactionContext transactionContext, InvocationContext invocationContext, Class<? extends TransactionContextEditor> transactionContextEditorClass) {
-
-
         if (StringUtils.isNotEmpty(invocationContext.getMethodName())) {
-
             try {
+                Object target;
+                if (StringUtils.isNotEmpty(invocationContext.getTargetResouceName()) && invocationContext.getTargetClass() != null) {
+                    target = FactoryBuilder.getBeanFactory().getBean(invocationContext.getTargetResouceName(), invocationContext.getTargetClass());
+                } else if (StringUtils.isNotEmpty(invocationContext.getTargetResouceName())) {
+                    target = FactoryBuilder.getBeanFactory().getBean(invocationContext.getTargetResouceName());
+                } else if (invocationContext.getTargetClass() != null) {
+                    target = FactoryBuilder.getBeanFactory().getBean(invocationContext.getTargetClass());
+                } else {
+                    return null;
+                }
 
-                Object target = FactoryBuilder.factoryOf(invocationContext.getTargetClass()).getInstance();
+                Method method = target.getClass().getMethod(invocationContext.getMethodName(), invocationContext.getParameterTypes());
 
-                Method method = null;
-
-                method = target.getClass().getMethod(invocationContext.getMethodName(), invocationContext.getParameterTypes());
-
-                FactoryBuilder.factoryOf(transactionContextEditorClass).getInstance().set(transactionContext, target, method, invocationContext.getArgs());
+                FactoryBuilder.getBeanFactory().getBean(transactionContextEditorClass).set(transactionContext, target, method, invocationContext.getArgs());
 
                 return method.invoke(target, invocationContext.getArgs());
-
             } catch (Exception e) {
                 throw new SystemException(e);
             }
