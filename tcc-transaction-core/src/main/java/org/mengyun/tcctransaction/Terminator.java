@@ -39,7 +39,16 @@ public class Terminator implements Serializable {
         if (StringUtils.isNotEmpty(invocationContext.getMethodName())) {
 
             try {
-                Object target = BeanFactoryAdapter.getBean(invocationContext.getTargetClass());
+                Object target;
+                if (StringUtils.isNotEmpty(invocationContext.getTargetResouceName()) && invocationContext.getTargetClass() != null) {
+                    target = BeanFactoryAdapter.getBean(invocationContext.getTargetResouceName(), invocationContext.getTargetClass());
+                } else if (StringUtils.isNotEmpty(invocationContext.getTargetResouceName())) {
+                    target = BeanFactoryAdapter.getBean(invocationContext.getTargetResouceName());
+                } else if (invocationContext.getTargetClass() != null) {
+                    target = BeanFactoryAdapter.getBean(invocationContext.getTargetClass());
+                } else {
+                    return null;
+                }
 
                 if (target == null && !invocationContext.getTargetClass().isInterface()) {
                     target = invocationContext.getTargetClass().newInstance();

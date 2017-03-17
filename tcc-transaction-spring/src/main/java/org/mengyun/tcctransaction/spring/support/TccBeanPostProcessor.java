@@ -17,8 +17,8 @@ public class TccBeanPostProcessor implements ApplicationListener<ContextRefreshe
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
 
-        if (applicationContext.getParent() == null) {
-
+        // edit by wangmin
+        /*if (applicationContext.getParent() == null)*/ {
             BeanFactoryAdapter.setBeanFactory(applicationContext.getBean(BeanFactory.class));
         }
     }

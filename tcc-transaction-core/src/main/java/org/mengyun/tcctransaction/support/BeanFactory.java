@@ -5,4 +5,8 @@ package org.mengyun.tcctransaction.support;
  */
 public interface BeanFactory {
     Object getBean(Class<?> aClass);
+    Object getBean(String name);
+    Object getBean(String name, Class<?> aClass);
+
+    String getBeanName(Object bean, Class targetClass);
 }
