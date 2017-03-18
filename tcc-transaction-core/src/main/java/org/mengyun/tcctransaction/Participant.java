@@ -53,4 +53,19 @@ public class Participant implements Serializable {
         terminator.invoke(new TransactionContext(xid, TransactionStatus.CONFIRMING.getId()), confirmInvocationContext, transactionContextEditorClass);
     }
 
+    public TransactionXid getXid() {
+        return xid;
+    }
+
+    public InvocationContext getConfirmInvocationContext() {
+        return confirmInvocationContext;
+    }
+
+    public InvocationContext getCancelInvocationContext() {
+        return cancelInvocationContext;
+    }
+
+    public Terminator getTerminator() {
+        return terminator;
+    }
 }

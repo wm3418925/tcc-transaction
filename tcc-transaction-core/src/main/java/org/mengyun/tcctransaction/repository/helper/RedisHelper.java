@@ -42,10 +42,10 @@ public class RedisHelper {
                             }
                         });
 
-
-                        byte[] content = entries.get(entries.size() - 1).getValue();
-
-                        return content;
+                        if (entries.isEmpty())
+                            return null;
+                        else
+                            return entries.get(entries.size() - 1).getValue();
                     }
                 }
         );
@@ -63,9 +63,10 @@ public class RedisHelper {
             }
         });
 
-        byte[] content = entries.get(entries.size() - 1).getValue();
-
-        return content;
+        if (entries.isEmpty())
+            return null;
+        else
+            return entries.get(entries.size() - 1).getValue();
     }
 
     public static <T> T execute(JedisPool jedisPool, JedisCallback<T> callback) {

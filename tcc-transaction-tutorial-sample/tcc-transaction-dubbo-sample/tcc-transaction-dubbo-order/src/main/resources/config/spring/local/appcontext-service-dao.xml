@@ -50,7 +50,7 @@
     <!--</bean>-->
 
     <!--<bean id="transactionRepository"-->
-          <!--class="org.mengyun.tcctransaction.repository.ZookeeperTransactionRepository">-->
+          <!--class="org.mengyun.tcctransaction.repository.ZooKeeperTransactionRepository">-->
         <!--&lt;!&ndash;<property name="zkServers" value="localhost:2181,localhost:2183,localhost:2185"/>&ndash;&gt;-->
         <!--<property name="zkServers" value="localhost:2181"/>-->
         <!--<property name="zkTimeout" value="10000"/>-->
