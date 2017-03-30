@@ -42,8 +42,6 @@
         <property name="dataSource" ref="capitalDataSource"/>
     </bean>
 
-    <tx:annotation-driven transaction-manager="transactionManager" order="2"/>
-
-    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <tx:annotation-driven transaction-manager="transactionManager" />
 
 </beans>
