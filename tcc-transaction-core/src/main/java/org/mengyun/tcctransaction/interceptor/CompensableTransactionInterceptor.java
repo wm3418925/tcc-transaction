@@ -59,20 +59,17 @@ public class CompensableTransactionInterceptor {
 
 
     private Object rootMethodProceed(ProceedingJoinPoint pjp) throws Throwable {
-
         Object returnValue = null;
+        Transaction transaction = null;
 
         try {
-
-            transactionManager.begin();
-
+            transaction = transactionManager.begin();
             try {
                 returnValue = pjp.proceed();
             } catch (Throwable tryingException) {
                 if (tryingException instanceof OptimisticLockException
                     || ExceptionUtils.getRootCause(tryingException) instanceof OptimisticLockException) {
                 } else {
-                    Transaction transaction = transactionManager.getCurrentTransaction();
                     logger.warn(String.format("compensable transaction trying failed. transaction content:%s", JSON.toJSONString(transaction)), tryingException);
                      transactionManager.rollback();
                 }
@@ -83,32 +80,31 @@ public class CompensableTransactionInterceptor {
             transactionManager.commit();
 
         } finally {
-            transactionManager.cleanAfterCompletion();
+            transactionManager.cleanAfterCompletion(transaction);
         }
 
         return returnValue;
     }
 
     private Object providerMethodProceed(ProceedingJoinPoint pjp, TransactionContext transactionContext) throws Throwable {
-
+        Transaction transaction = null;
         try {
 
             switch (TransactionStatus.valueOf(transactionContext.getStatus())) {
                 case TRYING:
-                    transactionManager.propagationNewBegin(transactionContext);
+                    transaction = transactionManager.propagationNewBegin(transactionContext);
                     return pjp.proceed();
                 case CONFIRMING:
                     try {
-                        transactionManager.propagationExistBegin(transactionContext);
+                        transaction = transactionManager.propagationExistBegin(transactionContext);
                         transactionManager.commit();
                     } catch (NoExistedTransactionException excepton) {
                         //the transaction has been commit,ignore it.
                     }
                     break;
                 case CANCELLING:
-
                     try {
-                        transactionManager.propagationExistBegin(transactionContext);
+                        transaction = transactionManager.propagationExistBegin(transactionContext);
                         transactionManager.rollback();
                     } catch (NoExistedTransactionException exception) {
                         //the transaction has been rollback,ignore it.
@@ -117,7 +113,7 @@ public class CompensableTransactionInterceptor {
             }
 
         } finally {
-            transactionManager.cleanAfterCompletion();
+            transactionManager.cleanAfterCompletion(transaction);
         }
 
         Method method = ((MethodSignature) (pjp.getSignature())).getMethod();
