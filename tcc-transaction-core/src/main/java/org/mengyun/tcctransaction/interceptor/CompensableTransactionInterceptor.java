@@ -33,19 +33,21 @@ public class CompensableTransactionInterceptor {
     }
 
     public Object interceptCompensableMethod(ProceedingJoinPoint pjp) throws Throwable {
-
-
         TransactionContext transactionContext = CompensableMethodUtils.getTransactionContextFromArgs(pjp.getArgs());
 
         MethodType methodType = CompensableMethodUtils.calculateMethodType(transactionContext, true);
 
-        switch (methodType) {
-            case ROOT:
-                return rootMethodProceed(pjp);
-            case PROVIDER:
-                return providerMethodProceed(pjp, transactionContext);
-            default:
-                return pjp.proceed();
+        try {
+            switch (methodType) {
+                case ROOT:
+                    return rootMethodProceed(pjp);
+                case PROVIDER:
+                    return providerMethodProceed(pjp, transactionContext);
+                default:
+                    return pjp.proceed();
+            }
+        } finally {
+            transactionConfigurator.getTransactionManager().cleanAfterCompletion();
         }
     }
 

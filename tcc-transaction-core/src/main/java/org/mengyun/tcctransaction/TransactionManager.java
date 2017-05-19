@@ -70,6 +70,9 @@ public class TransactionManager {
     public Transaction getCurrentTransaction() {
         return threadLocalTransaction.get();
     }
+    public void cleanAfterCompletion() {
+        threadLocalTransaction.remove();
+    }
 
     public void rollback() {
 
